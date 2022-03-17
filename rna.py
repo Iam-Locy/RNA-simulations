@@ -11,7 +11,7 @@ BASES = ["A", "U", "G", "C"]
 LENGTH = len(TEMPLATE)
 POPULATION_SIZE = 50
 STARTER_SIZE = int(POPULATION_SIZE / 5)
-NUMBER_OF_SIMULATIONS = input("Please enter the number of simulations:")
+NUMBER_OF_SIMULATIONS = int(input("Please enter the number of simulations:"))
 
 RNG = default_rng()
 
