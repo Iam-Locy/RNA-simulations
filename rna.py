@@ -11,7 +11,7 @@ BASES = ["A", "U", "G", "C"]
 LENGTH = len(TEMPLATE)
 POPULATION_SIZE = 50
 STARTER_SIZE = int(POPULATION_SIZE / 5)
-NUMBER_OF_SIMULATIONS = 100
+NUMBER_OF_SIMULATIONS = 10
 
 RNG = default_rng()
 
@@ -94,7 +94,7 @@ def main():
     
     df = pandas.read_csv("noRecombination.csv", names= ["Generations"], )
     df.hist()
-    plt.show()
+    plt.savefig('noRecombination.png')
 
 
 if __name__ == '__main__':
