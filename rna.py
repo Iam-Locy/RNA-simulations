@@ -65,8 +65,16 @@ def getDistances(structure):
         RNA.Make_swString(TEMPLATE), RNA.Make_swString(structure))
     return (math.e**-distance)
 
+def recombine(seq1, seq2):
+    loc = RNG.integers(0,int(LENGTH*2/3))
+    length = RNG.integers(0,int(LENGTH/3))
 
-def simulate():
+    seq1_out = seq1[:loc] + seq2[loc:loc+length] + seq1[loc+length:]
+    seq2_out = seq2[:loc] + seq1[loc:loc+length] + seq2[loc+length:]
+
+    return (seq1_out, seq2_out)
+
+def simulate(recombination = False):
     population = []
     starterPop = []
     structures = []
@@ -80,21 +88,41 @@ def simulate():
         distances = list(map(lambda x: x/sum(distances), distances))
         starterPop = list(RNG.choice(population, STARTER_SIZE, False, distances))
 
+        if recombination and len(starterPop) >= 2:
+            (index1, seq1) = RNG.choice(list(enumerate(starterPop)))
+            (index2, seq2) = RNG.choice(list(enumerate(starterPop)))
+
+            (seq1, seq2) = recombine(seq1, seq2)
+            
+            starterPop[int(index1)] = seq1
+            starterPop[int(index2)] = seq2
+
         index += 1
     
     return index
 
 
 def main():
+
     with open("noRecombination.csv",'w') as f:
         for i in range(NUMBER_OF_SIMULATIONS):
-            generations = simulate()
+            generations = simulate(False)
             f.write(f'{generations}\n')
 
     
     df = pandas.read_csv("noRecombination.csv", names= ["Generations"], )
     df.hist()
     plt.savefig('noRecombination.png')
+
+    with open("withRecombination.csv",'w') as f:
+        for i in range(NUMBER_OF_SIMULATIONS):
+            generations = simulate(True)
+            f.write(f'{generations}\n')
+
+    
+    df = pandas.read_csv("withRecombination.csv", names= ["Generations"], )
+    df.hist()
+    plt.savefig('withRecombination.png')
 
 
 if __name__ == '__main__':
